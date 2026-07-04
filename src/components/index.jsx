@@ -1,1 +1,1 @@
-export {default as TrackList} from './TrackList/TrackList';
+export { default as MusicBox } from './MusicBox/MusicBox';
