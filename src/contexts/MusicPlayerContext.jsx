@@ -25,6 +25,7 @@ const defaultValues = {
         file: Track3,
       },
     ],
+    duration: 0,
     currentTrackIndex: null,
     isPlaying: false,
   }

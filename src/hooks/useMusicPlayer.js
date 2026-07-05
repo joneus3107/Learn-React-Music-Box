@@ -3,30 +3,42 @@ import { MusicPlayerContext } from "../contexts/MusicPlayerContext";
 
 const useMusicPlayer = () => {
   const {state, setState} = useContext(MusicPlayerContext);
+  const currentTrack =
+    state.currentTrackIndex !== null
+      ? state.tracks[state.currentTrackIndex]
+      : null;
+
+  const currentTrackName = currentTrack?.name || "";
+  const currentTrackThumb = currentTrack?.thumbnail || "";
+  const currentTrackDuration = state.audioPlayer.duration || 0;
 
   // Play a specific track
   function playTrack(index) {
     if (index === state.currentTrackIndex) {
-      console.log("clicked");
       togglePlay();
     } else {
       state.audioPlayer.pause();
       state.audioPlayer = new Audio(state.tracks[index].file);
+      state.audioPlayer.addEventListener("loadedmetadata", () => {
+        setState((prev) => ({ ...prev, duration: state.audioPlayer.duration || 0 }));
+      });
       state.audioPlayer.play();
-      setState((state) => ({
-        ...state,
+      setState((prev) => ({
+        ...prev,
         currentTrackIndex: index,
         isPlaying: true,
+        duration: 0, // reset until metadata loads
       }));
     }
-    console.log(
-      state.currentTrackIndex !== null &&
-        state.tracks[state.currentTrackIndex].name
-    );
   }
 
   // Toggle play or pause
   function togglePlay() {
+    if(currentTrack === null) {
+      playTrack(0);
+      return;
+    }
+
     if (state.isPlaying) {
       state.audioPlayer.pause();
     } else {
@@ -53,9 +65,9 @@ const useMusicPlayer = () => {
   return {
     playTrack,
     togglePlay,
-    currentTrackName:
-      state.currentTrackIndex !== null &&
-      state.tracks[state.currentTrackIndex].name,
+    currentTrackName,
+    currentTrackThumb,
+    currentTrackDuration,
     trackList: state.tracks,
     isPlaying: state.isPlaying,
     currentTrackIndex: state.currentTrackIndex,

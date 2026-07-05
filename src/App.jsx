@@ -7,13 +7,40 @@ import { CssBaseline, Container } from '@mui/material';
 
 const theme = createTheme({
   palette: {
+    primary: {
+      main: '#d3bbdd',
+    },
+    secondary: {
+      main: '#eadeee',
+    },
     background: {
       default: '#121212',
     },
     text: {
-      primary: '#fff'
+      primary: '#d3bbdd'
     }
-  }
+  },
+  components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          '& .MuiTouchRipple-ripple': {
+            color: '#eadeee',
+          },
+        },
+      },
+    },
+
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: '#eadeee14',
+          },
+        },
+      },
+    },
+  },
 });
 
 function App() {
